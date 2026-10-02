@@ -136,6 +136,7 @@ def get_tetradic(hex_color) :
     color3 = rgb_to_hex(r3, g3, b3)
     return color_base, color1, color2, color3
 
+# SPLIT_COMPLEMENTARY
 def get_split_complementary(hex_color):
     r, g, b = hex_to_rgb(hex_color)
     h, s, v = rgb_to_hsv(r, g, b)
@@ -156,3 +157,26 @@ def get_split_complementary(hex_color):
     color3 = rgb_to_hex(r2, g2, b2)
 
     return color1, color2, color3
+
+# MONOCHROMATIC
+def get_monochromatic(hex_color):
+    r, g, b = hex_to_rgb(hex_color)
+
+    h, s, v = rgb_to_hsv(r, g, b)
+
+    values = [
+        max(v - 0.4, 0),
+        max(v - 0.2, 0),
+        v,
+        min(v + 0.1, 1),
+        min(v + 0.2, 1)
+    ]
+
+    colors = []
+
+    for value in values:
+        r, g, b = hsv_to_rgb(h, s, value)
+        colors.append(rgb_to_hex(r, g, b))
+
+    return tuple(colors)
+
