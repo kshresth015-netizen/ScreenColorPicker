@@ -47,3 +47,33 @@ def get_complementary(hex_color):
     )
 
     return rgb_to_hex(r, g, b)
+
+def get_Analogous(hex_color):
+    r, g, b = hex_to_rgb(hex_color)
+    h, s, v = rgb_to_hsv(r, g, b)
+
+
+    Analogous_hue1 = (h -30) % 360
+    Analogous_base = (h)
+    Analogous_hue2 = (h + 30) % 360
+
+    r1, g1, b1 =hsv_to_rgb(
+        Analogous_hue1, s, v
+        )
+    color1 = rgb_to_hex(r1, g1, b1)
+
+    # rb, gb, bb =hsv_to_rgb(
+    #     Analogous_base, s, v
+    #     )
+    # color2 = rgb_to_hex(rb, gb, bb)
+
+    color2 = hex_color
+
+    r2, g2, b2 =hsv_to_rgb(
+        Analogous_hue2, s, v
+        )
+    color3 = rgb_to_hex(r2, g2, b2)
+
+    return color1, color2, color3
+
+
