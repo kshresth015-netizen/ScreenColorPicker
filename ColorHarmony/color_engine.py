@@ -56,7 +56,7 @@ def get_complementary(hex_color):
     return rgb_to_hex(r, g, b)
 
 #ANALOGOUS
-def get_Analogous(hex_color):
+def get_analogous(hex_color):
     r, g, b = hex_to_rgb(hex_color)
     h, s, v = rgb_to_hsv(r, g, b)
 
