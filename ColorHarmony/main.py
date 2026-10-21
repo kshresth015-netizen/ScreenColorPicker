@@ -1,6 +1,7 @@
 
 import tkinter as tk
 
+from tkinter import colorchooser
 from color_engine import (
     get_complementary,
     get_analogous,
@@ -123,6 +124,36 @@ class ColorHarmonyApp:
 
         subtitle.pack(pady=(0, 20))
 
+
+    def choose_color(self):
+        result = colorchooser.askcolor(
+            color=self.selected_color,
+            title="Choose a Color"
+        )
+
+        selected_hex = result[1]
+
+        if selected_hex is None:
+            return
+
+        self.selected_color = selected_hex
+
+        self.color_preview.configure(
+            bg=self.selected_color
+        )
+
+        self.color_label.configure(
+            text=self.selected_color
+        )
+
+        self.generate_harmonies()
+
+        for widget in self.scrollable_frame.winfo_children():
+            if getattr(widget, "is_palette_section", False):
+                widget.destroy()
+
+        self.display_harmonies()
+
     def create_color_preview(self):
         preview_container = tk.Frame(
             self.scrollable_frame,
@@ -152,6 +183,25 @@ class ColorHarmonyApp:
         )
 
         self.color_label.pack(pady=(12, 0))
+
+        self.choose_color_button = tk.Button(
+            self.scrollable_frame,
+            text="Choose Color",
+            font=("Arial", 11, "bold"),
+            command=self.choose_color,
+            bg="#222222",
+            fg="white",
+            activebackground="#444444",
+            activeforeground="white",
+            cursor="hand2",
+            padx=15,
+            pady=8
+        )
+
+        self.choose_color_button.pack(pady=10)
+
+
+
 
     def generate_harmonies(self):
         self.harmonies = {
