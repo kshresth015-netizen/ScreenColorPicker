@@ -154,6 +154,56 @@ class ColorHarmonyApp:
 
         self.display_harmonies()
 
+    def apply_hex(self):
+        color = self.hex_entry.get().strip()
+
+        # Validate the HEX code
+        if not color.startswith("#") or len(color) != 7:
+            self.copy_status.config(
+                text="Invalid HEX! Use #RRGGBB",
+                fg="red"
+            )
+            return
+
+        try:
+            int(color[1:], 16)
+        except ValueError:
+            self.copy_status.config(
+                text="Invalid HEX! Use #RRGGBB",
+                fg="red"
+            )
+            return
+
+        # Update the selected color
+        self.selected_color = color.upper()
+
+        self.color_preview.configure(
+            bg=self.selected_color
+        )
+
+        self.color_label.configure(
+            text=self.selected_color
+        )
+
+        self.hex_entry.delete(0, tk.END)
+        self.hex_entry.insert(0, self.selected_color)
+
+        # Regenerate all harmony palettes
+        self.generate_harmonies()
+
+        # Remove old palette sections
+        for widget in self.scrollable_frame.winfo_children():
+            if getattr(widget, "is_palette_section", False):
+                widget.destroy()
+
+        # Display updated palettes
+        self.display_harmonies()
+
+        self.copy_status.config(
+            text="Color applied successfully!",
+            fg="green"
+        )
+
     def create_color_preview(self):
         preview_container = tk.Frame(
             self.scrollable_frame,
@@ -183,6 +233,28 @@ class ColorHarmonyApp:
         )
 
         self.color_label.pack(pady=(12, 0))
+
+        # HEX input field
+        self.hex_entry = tk.Entry(
+            self.scrollable_frame,
+            font=("Arial", 12),
+            width=15,
+            justify="center"
+        )
+
+        self.hex_entry.insert(0, self.selected_color)
+        self.hex_entry.pack(pady=5)
+
+        # Apply HEX button
+        self.hex_button = tk.Button(
+            self.scrollable_frame,
+            text="Apply HEX",
+            command=self.apply_hex,
+            font=("Arial", 10, "bold"),
+            cursor="hand2"
+        )
+
+        self.hex_button.pack(pady=5)
 
         self.choose_color_button = tk.Button(
             self.scrollable_frame,
