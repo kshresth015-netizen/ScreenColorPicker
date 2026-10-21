@@ -200,6 +200,16 @@ class ColorHarmonyApp:
 
         self.choose_color_button.pack(pady=10)
 
+        self.copy_status = tk.Label(
+            self.scrollable_frame,
+            text="",
+            font=("Arial", 10),
+            bg="#F5F5F5",
+            fg="green"
+        )
+
+        self.copy_status.pack(pady=5)
+
 
 
 
@@ -253,7 +263,29 @@ class ColorHarmonyApp:
 
         label.pack(pady=(6, 2))
 
+        copy_button = tk.Button(
+            frame, text ="Copy HEX", font = ("Arial", 10),
+            bg="#FFFFFF",
+            command =lambda c= color:self.copy_hex(c),
+           cursor ="hand2"
+        )
+
+        copy_button.pack(pady=(0,4))
+
         return frame
+
+    def copy_hex(self, color):
+        try:
+            self.root.clipboard_clear()
+            self.root.clipboard_append(color)
+            self.root.update()
+
+            self.copy_status.config(
+                text=f"Copied {color}!"
+            )
+
+        except tk.TclError as error:
+            print("Clipboard error:", error)
 
     def create_palette_section(self, parent, name, colors):
         section = tk.Frame(
@@ -263,6 +295,8 @@ class ColorHarmonyApp:
             pady=12,
             bd=0
         )
+
+        section.is_palette_section = True   #add to remove the preview palette
 
         section.pack(
             pady=10,
